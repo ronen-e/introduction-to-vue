@@ -4,13 +4,13 @@
 			<header>IP Generator</header>
 			<article>
 				<p>
-					<input v-model="query" placeholder="IP or Domain name" type="text" autocomplete="off" />
+					<input tabindex="1" v-model="query" placeholder="IP or Domain name" type="text" autocomplete="off" />
 				</p>
-				<button @click="getData()">Get GEO data</button>
+				<button tabindex="1" :disabled="loading" @click="getData()">Get GEO data</button>
 			</article>
 			<article v-if="result">
 				<p>Here is your GEO data</p>
-				<pre>{{result}}</pre>
+				<pre>{{result | json}}</pre>
 			</article>
 		</section>
 	</main>
@@ -22,24 +22,36 @@
 
 		data() {
 			return {
+				loading: false,
 				query: '',
 				result: ''
 			};
 		},
 		methods: {
 			getData() {
+				if (this.loading) return;
+
+				this.loading = true;
 				fetch("http://ip-api.com/json/" + this.query)
 					.then(res => res.json())
 					.then(this.update)
-					.catch(this.onError);
+					.catch(this.onError)
+					.finally(() => this.loading = false)
 			},
 			update(data) {
-				this.result = JSON.stringify(data, null, 2);
+				this.result = data;
 			},
 			onError(e) {
 				alert(e);
 			}
-		}
+		},
+
+		filters: {
+			json(value) {
+				if (!value) return ''
+				return JSON.stringify(value, null, 2);
+			}
+		}		
 	};
 </script>
 
@@ -60,5 +72,9 @@
 		border-radius: 5px;
 		color: white;
 		cursor: pointer;
+	}
+	button[disabled] {
+		background-color: red;
+		cursor: not-allowed;
 	}
 </style>
