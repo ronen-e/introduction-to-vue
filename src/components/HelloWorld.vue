@@ -1,18 +1,40 @@
 <template>
 	<main>
-		<section>
-			<header>IP Generator</header>
-			<article>
-				<p>
-					<input tabindex="1" v-model="query" placeholder="IP or Domain name" type="text" autocomplete="off" />
-				</p>
-				<button tabindex="1" :disabled="loading" @click="getData()">Get GEO data</button>
-			</article>
-			<article v-if="result">
-				<p>Here is your GEO data</p>
-				<pre>{{result | json}}</pre>
-			</article>
-		</section>
+		<v-container>
+			<v-layout wrap>
+				<v-flex xs12 text-center>
+					<header>IP Generator</header>
+				</v-flex>
+
+				<v-flex xs12 md6>
+					<article class="pa-2 ma-3">
+						<v-text-field
+							v-model="query"
+							outlined
+							prepend-icon="mdi-map-marker"
+							rounded
+							label="Query"
+							clearable
+							autofocus
+							tabindex="1"
+							placeholder="IP or Domain name"
+							:autocomplete="false"
+							@keyup.enter="getData()"
+							:loading="loading"
+						></v-text-field>
+						<v-btn block rounded color="primary" tabindex="1" :loading="loading" @click="getData()">Get GEO data</v-btn>
+					</article>
+					
+				</v-flex>
+
+				<v-flex v-if="result" xs12 md6>
+					<article class="pa-2 ma-3">
+						<p>Here is your GEO data</p>
+						<pre>{{result | json}}</pre>
+					</article>
+				</v-flex>
+			</v-layout>
+		</v-container>
 	</main>
 </template>
 
@@ -27,6 +49,7 @@
 				result: ''
 			};
 		},
+
 		methods: {
 			getData() {
 				if (this.loading) return;
@@ -51,30 +74,16 @@
 				if (!value) return ''
 				return JSON.stringify(value, null, 2);
 			}
-		}		
+		}
 	};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-	section {
-		padding: 0 80px;
-	}
+
 	article {
-		padding: 10px;
 		margin: 20px;
 		border: 1px solid gainsboro;
-	}
-
-	button {
-		background-color: rgb(83, 170, 83);
-		padding: 10px;
-		border-radius: 5px;
-		color: white;
-		cursor: pointer;
-	}
-	button[disabled] {
-		background-color: red;
-		cursor: not-allowed;
+		overflow: auto;
 	}
 </style>
