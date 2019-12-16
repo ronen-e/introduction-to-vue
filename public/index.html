@@ -6,62 +6,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 		<link rel="icon" href="<%= BASE_URL %>favicon.ico">
 		<title>introduction-to-vue</title>
-		<style>
-			#app { display: none;}
-			section {
-				padding: 0 80px;
-			}
-			article {
-				padding: 10px;
-				margin: 20px;
-				border: 1px solid gainsboro;
-			}
-
-			button {
-				background-color: rgb(83, 170, 83);
-				padding: 10px;
-				border-radius: 5px;
-				color: white;
-				cursor: pointer;
-			}
-		</style>
-		<script>
-			function getData() {
-				var query = document.getElementById('query').value;
-				fetch('http://ip-api.com/json/' + query)
-					.then(res => res.json())
-					.then(update)
-					.catch(onError)
-			}
-			function update(data) {
-				var result = document.getElementById('result');
-				result.innerHTML = JSON.stringify(data, null, 2);
-
-				document.getElementById('result-view').removeAttribute('hidden')
-			}
-			function onError(e) {
-				alert(e);
-			}
-		</script>
 	</head>
 	<body>
-		<main>
-			<section>
-				<header>IP Generator</header>
-				<article>
-					<p>
-						<input placeholder="IP or Domain name" type="text" 
-							id="query" autocomplete="off"/>
-					</p>
-					<button onclick="getData()">Get GEO data</button>
-				</article>
-				<article hidden id="result-view">
-					<p>Here is your GEO data</p>
-					<pre id="result"></pre>
-				</article>
-			</section>
-		</main>
-
 		<div id="app"></div>
 		<!-- built files will be auto injected -->
 	</body>
