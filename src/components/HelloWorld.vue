@@ -38,44 +38,40 @@
 	</main>
 </template>
 
-<script>
-	export default {
-		name: "HelloWorld",
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-		data() {
-			return {
-				loading: false,
-				query: '',
-				result: ''
-			};
-		},
+@Component({
+  filters: {
+    json(value: object) {
+      if (!value) return ''
+      return JSON.stringify(value, null, 2);
+    }
+  }
+})
+export default class HelloWorld extends Vue {
+  name: string = "HelloWorld";
+  loading: boolean = false;
+  query: string = '';
+  result: object|null = null;
 
-		methods: {
-			getData() {
-				if (this.loading) return;
+  getData() {
+    if (this.loading) return;
 
-				this.loading = true;
-				fetch("http://ip-api.com/json/" + this.query)
-					.then(res => res.json())
-					.then(this.update)
-					.catch(this.onError)
-					.finally(() => this.loading = false)
-			},
-			update(data) {
-				this.result = data;
-			},
-			onError(e) {
-				alert(e);
-			}
-		},
-
-		filters: {
-			json(value) {
-				if (!value) return ''
-				return JSON.stringify(value, null, 2);
-			}
-		}
-	};
+    this.loading = true;
+    fetch("http://ip-api.com/json/" + this.query)
+      .then(res => res.json())
+      .then(this.update)
+      .catch(this.onError)
+      .finally(() => this.loading = false)
+  }
+  update(data: object) {
+    this.result = data;
+  }
+  onError(e: Error) {
+    alert(e);
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
